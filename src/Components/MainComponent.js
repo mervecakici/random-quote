@@ -16,17 +16,36 @@ class MainComponent extends React.Component {
                 text: '',
                 author: ''
             }],
-            quoteIndex: 0
+            quoteIndex: 0,
+            quotePrevArray : [],
         }
         this.handleChangeQuote = this.handleChangeQuote.bind(this);
+        this.handlePreviousQuote = this.handlePreviousQuote.bind(this);
+    
     };
     handleChangeQuote(){
         const { quoteDataArray } = this.state
         this.setState({
             colorIndex: getRandomNumber(COLORS.length /* Max value */),
-            quoteIndex: getRandomNumber(quoteDataArray.length)
+            quoteIndex: getRandomNumber(quoteDataArray.length),
+            quotePrevArray: this.state.quotePrevArray.concat([this.state.quoteIndex])
         })
     }
+    handlePreviousQuote(){
+       if(this.state.quotePrevArray.length > 0){
+        this.setState({
+            quoteIndex: this.state.quotePrevArray[this.state.quotePrevArray.length-1],
+            quotePrevArray: this.state.quotePrevArray.reverse().slice(1).reverse(),
+            colorIndex: getRandomNumber(COLORS.length /* Max value */),
+        })
+    }
+      else{
+        this.setState({
+            quoteIndex: this.state.quotePrevArray[0],
+        })
+      }
+    }
+  
 
     componentDidMount() {
         fetch("https://type.fit/api/quotes")
@@ -40,8 +59,10 @@ class MainComponent extends React.Component {
     }
  
     render(){
-        const { quoteDataArray, quoteIndex, colorIndex } = this.state
+        const { quoteDataArray, quoteIndex, colorIndex,quotePrevArray } = this.state
         const { text, author } = quoteDataArray[quoteIndex]
+        console.log("mrev",quoteDataArray[quoteIndex])
+        console.log("abc",quotePrevArray)
 
         return(
             <div id="main-container" style={{backgroundColor: COLORS[colorIndex]}}>
@@ -49,9 +70,10 @@ class MainComponent extends React.Component {
                     <p id="text" style={{color: COLORS[colorIndex]}}>{text}</p>
                     <p id="author" style={{color: COLORS[colorIndex]}}>{`-${author}`}</p>
                     <div class="buttons">
-                        <a type="button" class="share-buttons"id="tweet-quote" href="www.google.com">twitter</a>
-                        <a class="share-buttons" id="whatsapp-quote" href="www.google.com">whatsapp</a>
-                        <a class="share-buttons" id="facebook-quote" href="www.google.com">facebook</a>
+                        <a class="share-buttons" id="tweet-quote">twitter</a>
+                        <a class="share-buttons" id="whatsapp-quote" >whatsapp</a>
+                        <a class="share-buttons" id="facebook-quote">facebook</a>
+                        <button id="back-button" onClick={this.handlePreviousQuote} disabled={this.state.quotePrevArray.length<=0} style={{backgroundColor: COLORS[colorIndex]}}>Previus</button>
                         <button id="new-quote" onClick={this.handleChangeQuote} style={{backgroundColor: COLORS[colorIndex]}}>New Quote</button>
                     </div>
                 </div>
