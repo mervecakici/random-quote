@@ -50,8 +50,12 @@
     margin-left:10px;
    
 }
+#back-button {
+    color: white;
+    margin-left: 260px;
+}
 #new-quote {
-    margin-left:340px;
+    margin-left:20px;
     color: white;
     
     
