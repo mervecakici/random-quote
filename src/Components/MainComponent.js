@@ -3,6 +3,7 @@ import React from 'react';
 import { getRandomNumber } from '../Utils/MathUtils.js'
 
 import "./MainComponent.css";
+import { TwitterShareButton, TwitterIcon,  FacebookShareButton, WhatsappShareButton, WhatsappIcon,  FacebookIcon} from "react-share";
 
 
 var COLORS = ["#F3F781", "#81DAF5", "#04B4AE", "#FACC2E", "#FA8258", "#F5BCA9", "#D8CEF6", "#00FFBF", "#FA5858", "#FF00FF", "#0080FF"]
@@ -61,6 +62,7 @@ class MainComponent extends React.Component {
     render(){
         const { quoteDataArray, quoteIndex, colorIndex,quotePrevArray } = this.state
         const { text, author } = quoteDataArray[quoteIndex]
+        const authorString = author === null ? "Unknown author" : author
         console.log("mrev",quoteDataArray[quoteIndex])
         console.log("abc",quotePrevArray)
 
@@ -68,11 +70,10 @@ class MainComponent extends React.Component {
             <div id="main-container" style={{backgroundColor: COLORS[colorIndex]}}>
                 <div id="quote-box">
                     <p id="text" style={{color: COLORS[colorIndex]}}>{text}</p>
-                    <p id="author" style={{color: COLORS[colorIndex]}}>{`-${author}`}</p>
+                    <p id="author" style={{color: COLORS[colorIndex]}}>{`-${authorString}`}</p>
                     <div class="buttons">
-                        <a class="share-buttons" id="tweet-quote">twitter</a>
-                        <a class="share-buttons" id="whatsapp-quote" >whatsapp</a>
-                        <a class="share-buttons" id="facebook-quote">facebook</a>
+                        <a href="twitter.com/intent/tweet" class="share-buttons" id="tweet-quote" ><TwitterShareButton url={`"${text}" -${authorString} #quoteoftheday`}><TwitterIcon size={32} round={true} /></TwitterShareButton></a>
+                        <a class="share-buttons" id="whatsapp-quote" ><WhatsappShareButton url={`"${text}" -${authorString}`}><WhatsappIcon size={32} round={true}/></WhatsappShareButton></a>
                         <button id="back-button" onClick={this.handlePreviousQuote} disabled={this.state.quotePrevArray.length<=0} style={{backgroundColor: COLORS[colorIndex]}}>Previus</button>
                         <button id="new-quote" onClick={this.handleChangeQuote} style={{backgroundColor: COLORS[colorIndex]}}>New Quote</button>
                     </div>
